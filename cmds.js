@@ -120,9 +120,11 @@ exports.testCmd = (rl,id) => {
 			   	//quiz.answer = quiz.answer.replace(/ñ/gi,"n");
 
 				if(resp === quiz.answer.toLowerCase()){
+					log("Su respuesta es correcta");
 					biglog('CORRECTO', 'green');
 
 				} else {
+					log("Su respuesta es incorrecta");
 					biglog('INCORRECTO', 'red');
 				}
 				
