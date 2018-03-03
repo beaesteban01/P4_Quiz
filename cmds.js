@@ -123,13 +123,12 @@ exports.testCmd = (rl,id) => {
 					log("Su respuesta es correcta");
 					biglog('CORRECTO', 'green');
 					
-					rl.prompt();
 				} else {
 					log("Su respuesta es incorrecta");
 					biglog('INCORRECTO', 'red');
-					rl.prompt();
+					
 				}
-				
+				rl.prompt();
 				
 			});
 
