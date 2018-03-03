@@ -117,18 +117,20 @@ exports.testCmd = (rl,id) => {
 			   	quiz.answer = quiz.answer.replace(/í/gi,"i");
 			   	quiz.answer = quiz.answer.replace(/ó/gi,"o");
 			   	quiz.answer = quiz.answer.replace(/ú/gi,"u");
-			   	//quiz.answer = quiz.answer.replace(/ñ/gi,"n");
+			   	
 
 				if(resp === quiz.answer.toLowerCase()){
 					log("Su respuesta es correcta");
 					biglog('CORRECTO', 'green');
-
+					
+					rl.prompt();
 				} else {
 					log("Su respuesta es incorrecta");
 					biglog('INCORRECTO', 'red');
+					rl.prompt();
 				}
 				
-				rl.prompt();
+				
 			});
 
 		} catch(error){
