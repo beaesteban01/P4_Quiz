@@ -113,24 +113,24 @@ exports.testCmd = (rl,id) => {
 				
 				resp.trim();
 				quiz.answer = quiz.answer.replace(/á/gi,"a");
-			   	quiz.answer = quiz.answer.replace(/é/gi,"e");
-			   	quiz.answer = quiz.answer.replace(/í/gi,"i");
-			   	quiz.answer = quiz.answer.replace(/ó/gi,"o");
-			   	quiz.answer = quiz.answer.replace(/ú/gi,"u");
-			   	
+				quiz.answer = quiz.answer.replace(/é/gi,"e");
+				quiz.answer = quiz.answer.replace(/í/gi,"i");
+				quiz.answer = quiz.answer.replace(/ó/gi,"o");
+				quiz.answer = quiz.answer.replace(/ú/gi,"u");
+			   	//quiz.answer = quiz.answer.replace(/ñ/gi,"n");
 
-				if(resp === quiz.answer.toLowerCase()){
-					log("Su respuesta es correcta");
-					biglog('CORRECTO', 'green');
-					
-				} else {
-					log("Su respuesta es incorrecta");
-					biglog('INCORRECTO', 'red');
-					
-				}
-				rl.prompt();
-				
-			});
+			   	if(resp === quiz.answer.toLowerCase()){
+			   		log("Su respuesta es correcta");
+			   		biglog('CORRECTO', 'green');
+
+
+			   	} else {
+			   		log("Su respuesta es incorrecta");
+			   		biglog('INCORRECTO', 'red');
+			   	}
+
+			   	rl.prompt();
+			   });
 
 		} catch(error){
 			errorlog(error.message);
@@ -147,54 +147,78 @@ exports.playCmd = rl => {
 
 	let toBeResolve = [];
 
-	//let numPreguntas = toBeResolve.count();
+	let numPreguntas = model.count();
 	let i;
 	const playOne = () => {
-	for (i=0; i<toBeResolve.lenght; i++){
-		
-		 	if (toBeResolve.count() === 0 ){
+		for (i=0; i<numPreguntas; i++){
+
+			toBeResolve[i]=i;
+			i++;
+
+
+		}
+
+
+		if (toBeResolve.lenght === 0 ){
 			log("Ninguna pregunta para mostrar");
 			log(`Llevas '${socre}' puntos`);
 			rl.prompt();
-			} else {
-				
+		} else {
 
-				//Elige id al azar
-				let idAzar = Math.random()*toBeRevolve; 
-				//quitarla del array 
-				let elimina = toBeResolve[idAzar];
-				toBeResolve.splice(elimina, 1);
 
-				const quiz = model.getByIndex(idAzar);
+		//Elige id al azar
+		var idAzar = Math.floor(Math.random()*(toBeResolve)); 
+		var id = toBeResolve[idAzar];
+
+		var quiz = model.getByIndex(id);
+		//quitarla del array 
+		//let elimina = toBeResolve[idAzar];
+		toBeResolve.splice(idAzar, 1);
+
+
+		if (typeof id === "undefined") {
+
+			errorlog(`Falta el parámetro id.`);
+			rl.prompt();
+		} else {	
+			try { 
 
 				rl.question(colorize(`${quiz.question}? `,'red'), resp => {
-				
-				resp.trim();
-				quiz.answer = quiz.answer.replace(/á/gi,"a");
-			   	quiz.answer = quiz.answer.replace(/é/gi,"e");
-			   	quiz.answer = quiz.answer.replace(/í/gi,"i");
-			   	quiz.answer = quiz.answer.replace(/ó/gi,"o");
-			   	quiz.answer = quiz.answer.replace(/ú/gi,"u");
-					
+
+					resp.trim();
+					quiz.answer = quiz.answer.replace(/á/gi,"a");
+					quiz.answer = quiz.answer.replace(/é/gi,"e");
+					quiz.answer = quiz.answer.replace(/í/gi,"i");
+					quiz.answer = quiz.answer.replace(/ó/gi,"o");
+					quiz.answer = quiz.answer.replace(/ú/gi,"u");
+
 					if(resp === quiz.answer.toLowerCase()){
 						score += 1;
-						biglog('CORRECTO', 'green');
+						log('CORRECTO', 'green');
 						log(`Llevas'${socre}' puntos`);
 						playOne();
 
 					} else {
-						biglog('INCORRECTO', 'red');
+						log('INCORRECTO', 'red');
 						log(`Has conseguido'${socre}' puntos. Puedes volver a empezar`);
 					}
 
-				})
-		 	}
-		
+				});
+			} catch (error) {
+				errorlog(error.message);
+				rl.prompt();
+
+			}
+
 		}
-	
-	}
 		
- playOne();
+	}
+
+	
+}
+
+playOne();
+
 };
 
 exports.creditsCmd = rl => {
@@ -202,3 +226,5 @@ exports.creditsCmd = rl => {
 	log('Beatriz Esteban Navarro');
 	rl.prompt();
 };
+
+
