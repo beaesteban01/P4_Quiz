@@ -161,7 +161,7 @@ exports.playCmd = rl => {
 
 		if (toBeResolve.lenght === 0 ){
 			log("Ninguna pregunta para mostrar");
-			log(`Llevas '${socre}' puntos`);
+			log(`Llevas '${score}' puntos`);
 			rl.prompt();
 		} else {
 
@@ -195,12 +195,12 @@ exports.playCmd = rl => {
 					if(resp === quiz.answer.toLowerCase()){
 						score += 1;
 						log('CORRECTO', 'green');
-						log(`Llevas'${socre}' puntos`);
+						log(`Llevas'${score}' puntos`);
 						playOne();
 
 					} else {
 						log('INCORRECTO', 'red');
-						log(`Has conseguido'${socre}' puntos. Puedes volver a empezar`);
+						log(`Has conseguido'${score}' puntos. Puedes volver a empezar`);
 					}
 
 				});
