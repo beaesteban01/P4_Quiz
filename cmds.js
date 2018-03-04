@@ -5,7 +5,6 @@ const {log, biglog, errorlog, colorize} = require('./out');
 
 
 
-
 exports.helpCmd = (rl) => {
 	log('Comandos:');
 	log('h|help - Listado de comandos');
@@ -128,9 +127,10 @@ exports.testCmd = (rl,id) => {
 			   	} else {
 			   		log("Su respuesta es incorrecta");
 			   		biglog('INCORRECTO', 'red');
+					
 			   	}
-
-			   	rl.prompt();
+				rl.prompt();
+			   	
 			   });
 
 		} catch(error){
@@ -145,25 +145,18 @@ exports.testCmd = (rl,id) => {
 exports.playCmd = rl => {
 	let score = 0;
 
-	let numPreguntas = model.count();
+
 	let toBeResolve = [];
 
-	
-	//let toBeResolve.lenght = numPreguntas;
-	log(`Tienes ${numPreguntas} preguntas`);
+	let numPreguntas = model.count();
 	let i;
-	
 	const playOne = () => {
-		
-	for (i=0; i<numPreguntas; i++){
+		for (i=0; i<numPreguntas; i++){
 
 			toBeResolve[i]=i;
-			//toBeResolve.push(i);
-			//toBeResolve.length = numPreguntas;
-			//i++;
-			//console.dir(toBeResolve);
-			//log(`${toBeResolve.lenght}`);
+			i++;
 		}
+
 
 		if (toBeResolve.lenght === 0 ){
 			log("Ninguna pregunta para mostrar");
@@ -207,7 +200,7 @@ exports.playCmd = rl => {
 					} else {
 						log('INCORRECTO', 'red');
 						log(`FIN DEL JUEGO. Has conseguido'${score}' puntos. Puedes volver a empezar`);
-					
+						
 					}
 
 				});
@@ -233,5 +226,3 @@ exports.creditsCmd = rl => {
 	log('Beatriz Esteban Navarro');
 	rl.prompt();
 };
-
-
