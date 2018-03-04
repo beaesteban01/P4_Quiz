@@ -152,6 +152,9 @@ exports.playCmd = rl => {
 	//let toBeResolve.lenght = numPreguntas;
 	log(`Tienes ${numPreguntas} preguntas`);
 	let i;
+	
+	const playOne = () => {
+		
 	for (i=0; i<numPreguntas; i++){
 
 			toBeResolve[i]=i;
@@ -161,9 +164,6 @@ exports.playCmd = rl => {
 			//console.dir(toBeResolve);
 			//log(`${toBeResolve.lenght}`);
 		}
-	const playOne = () => {
-		
-
 
 		if (toBeResolve.lenght === 0 ){
 			log("Ninguna pregunta para mostrar");
