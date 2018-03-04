@@ -154,10 +154,11 @@ exports.playCmd = rl => {
 	let i;
 	for (i=0; i<numPreguntas; i++){
 
-			toBeResolve.push(i);
+			toBeResolve[i]=i;
+			//toBeResolve.push(i);
 			//toBeResolve.length = numPreguntas;
 			//i++;
-			console.dir(toBeResolve);
+			//console.dir(toBeResolve);
 			//log(`${toBeResolve.lenght}`);
 		}
 	const playOne = () => {
@@ -173,9 +174,9 @@ exports.playCmd = rl => {
 
 		//Elige id al azar
 		var idAzar = Math.floor(Math.random()*(toBeResolve)); 
-		//var id = toBeResolve[idAzar];
+		var id = toBeResolve[idAzar];
 
-		var quiz = model.getByIndex(idAzar);
+		var quiz = model.getByIndex(id);
 		//quitarla del array 
 		//let elimina = toBeResolve[idAzar];
 		toBeResolve.splice(idAzar, 1);
