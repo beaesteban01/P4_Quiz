@@ -199,7 +199,7 @@ exports.playCmd = rl => {
 					} else {
 						log('INCORRECTO', 'red');
 						log(`Has conseguido'${score}' puntos. Puedes volver a empezar`);
-						prompt();
+						rl.prompt();
 					}
 
 				});
