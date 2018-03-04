@@ -127,9 +127,9 @@ exports.testCmd = (rl,id) => {
 			   	} else {
 			   		log("Su respuesta es incorrecta");
 			   		biglog('INCORRECTO', 'red');
-					rl.prompt();
+					
 			   	}
-
+				rl.prompt();
 			   	
 			   });
 
@@ -199,8 +199,8 @@ exports.playCmd = rl => {
 
 					} else {
 						log('INCORRECTO', 'red');
-						log(`Has conseguido'${score}' puntos. Puedes volver a empezar`);
-						rl.prompt();
+						log(`FIN DEL JUEGO. Has conseguido'${score}' puntos. Puedes volver a empezar`);
+						
 					}
 
 				});
