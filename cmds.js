@@ -172,7 +172,6 @@ exports.playCmd = rl => {
 
 		//Elige id al azar
 		var idAzar = Math.floor(Math.random()*(toBeResolve.lenght)); 
-		log(`${idAzar}`);
 		//var id = toBeResolve[idAzar];
 
 		var quiz = model.getByIndex(idAzar);
