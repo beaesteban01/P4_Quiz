@@ -8,7 +8,6 @@ const chalk = require('chalk');
 const colorize = (msg, color) => {
 	if (typeof color!== "undefined"){
 		msg = chalk[color].bold(msg);
-		
 	}
 	return msg;
 };
@@ -37,7 +36,7 @@ const biglog = (msg, color) => {
  *@param blabla
 */
 const errorlog =(emsg) => {
-	console.log(`${colorize("Error", "red")}:${colorize(colorize(emsg, ""), "bgYellowBright")}`);
+	console.log(`${colorize("Error", "red")}:${colorize(colorize(emsg, "red"), "bgYellowBright")}`);
 };
 
 exports = module.exports = {
