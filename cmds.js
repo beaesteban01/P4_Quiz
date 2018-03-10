@@ -144,17 +144,15 @@ exports.testCmd = (rl,id) => {
 
 exports.playCmd = rl => {
 	let score = 0;
-
-
 	let toBeResolve = [];
-
 	let numPreguntas = model.count();
+	toBeResolve.lenght = numPreguntas;
 	let i;
-	const playOne = () => {
-		for (i=0; i<numPreguntas; i++){
+
+
+	for (i=0; i<numPreguntas; i++){
 
 			toBeResolve[i]=i;
-			i++;
 		}
 
 
@@ -162,59 +160,54 @@ exports.playCmd = rl => {
 			log("Ninguna pregunta para mostrar");
 			log(`Llevas '${score}' puntos`);
 			rl.prompt();
-		} else {
+		} 
 
-
-		//Elige id al azar
-		var idAzar = Math.floor(Math.random()*(toBeResolve)); 
+	const playOne = () => {
+	
+	try { 
+			//Elige id al azar
+		var idAzar = Math.floor(Math.random()*(toBeResolve.lenght-score)); 
 		var id = toBeResolve[idAzar];
 
 		var quiz = model.getByIndex(id);
-		//quitarla del array 
-		//let elimina = toBeResolve[idAzar];
-		toBeResolve.splice(idAzar, 1);
-
-
-		if (typeof id === "undefined") {
-
-			errorlog(`Falta el parámetro id.`);
-			rl.prompt();
-		} else {	
-			try { 
-
-				rl.question(colorize(`${quiz.question}? `,'red'), resp => {
-
-					resp.trim();
-					quiz.answer = quiz.answer.replace(/á/gi,"a");
-					quiz.answer = quiz.answer.replace(/é/gi,"e");
-					quiz.answer = quiz.answer.replace(/í/gi,"i");
-					quiz.answer = quiz.answer.replace(/ó/gi,"o");
-					quiz.answer = quiz.answer.replace(/ú/gi,"u");
-
-					if(resp === quiz.answer.toLowerCase()){
-						score += 1;
-						log('CORRECTO', 'green');
-						log(`Llevas'${score}' puntos`);
-						playOne();
-
-					} else {
-						log('INCORRECTO', 'red');
-						log(`FIN DEL JUEGO. Has conseguido'${score}' puntos. Puedes volver a empezar`);
-						
-					}
-
-				});
-			} catch (error) {
-				errorlog(error.message);
-				rl.prompt();
-
-			}
-
-		}
 		
-	}
+			rl.question(colorize(`${quiz.question}? `,'red'), resp => {
 
-	
+				resp.trim();
+				quiz.answer = quiz.answer.replace(/á/gi,"a");
+				quiz.answer = quiz.answer.replace(/é/gi,"e");
+				quiz.answer = quiz.answer.replace(/í/gi,"i");
+				quiz.answer = quiz.answer.replace(/ó/gi,"o");
+				quiz.answer = quiz.answer.replace(/ú/gi,"u");
+
+				if(resp === quiz.answer.toLowerCase()){
+					
+					score += 1;
+					log('CORRECTO', 'green');
+					log(`Llevas'${score}' puntos`);
+					
+					if(score===numPreguntas){
+
+						biglog(' :)   HAS   GANADO!!!!', 'green');
+						rl.prompt();
+						
+					}else{
+						toBeResolve.splice(idAzar, 1);
+						playOne();
+					}
+					
+
+				} else {
+					log('INCORRECTO', 'red');
+					log(`FIN DEL JUEGO. Has conseguido'${score}' puntos. Puedes volver a empezar`);
+				}
+
+			});
+		} catch (error) {
+			errorlog(error.message);
+			rl.prompt();
+
+		}	
 }
 
 playOne();
