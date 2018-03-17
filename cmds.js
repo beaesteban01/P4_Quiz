@@ -164,46 +164,44 @@ exports.editCmd = (rl,id) => {
 };
 
 exports.testCmd = (rl,id) => {
-	if (typeof id === "undefined") {
-		errorlog(`Falta el parámetro id.`);
-		rl.prompt();
-	} else {
-		try {
-			const quiz = model.getByIndex(id);
-			rl.question(colorize(`${quiz.question}? `,'red'), resp => {
-				
-				resp.trim();
-				quiz.answer = quiz.answer.replace(/á/gi,"a");
-				quiz.answer = quiz.answer.replace(/é/gi,"e");
-				quiz.answer = quiz.answer.replace(/í/gi,"i");
-				quiz.answer = quiz.answer.replace(/ó/gi,"o");
-				quiz.answer = quiz.answer.replace(/ú/gi,"u");
-			   	//quiz.answer = quiz.answer.replace(/ñ/gi,"n");
 
-			   	if(resp === quiz.answer.toLowerCase()){
-			   		log("Su respuesta es correcta");
-			   		biglog('CORRECTO', 'green');
-
-
-			   	} else {
-			   		log("Su respuesta es incorrecta");
-			   		biglog('INCORRECTO', 'red');
-					
-			   	}
-				rl.prompt();
-			   	
-			   });
-
-		} catch(error){
-			errorlog(error.message);
-			rl.prompt();
+	validateId(id)
+	.then(id => models.quiz.findById(id))
+	.then(quiz => {
+		if(!quiz) {
+			throw new Error(`No existe quiz asociado a id = ${id}`);
 		}
-		
-	}
-
+		return makeQuestion(rl, `${quiz.question}?` )
+		.then (a => {
+			quiz.answer = quiz.answer.replace(/á/gi,"a");
+			quiz.answer = quiz.answer.replace(/é/gi,"e");
+			quiz.answer = quiz.answer.replace(/í/gi,"i");
+			quiz.answer = quiz.answer.replace(/ó/gi,"o");
+			quiz.answer = quiz.answer.replace(/ú/gi,"u");
+			if(a.toLowerCase() === quiz.answer.toLowerCase()){
+		   		log("Su respuesta es correcta");
+		   		biglog('CORRECTO', 'green');
+		   	} else {
+		   		log("Su respuesta es incorrecta");
+		   		biglog('INCORRECTO', 'red');
+		   	}
+		});
+	})
+	.catch (error => {
+		errorlog(error.message); 
+	})
+	.then(() => {
+		rl.prompt();
+	});	
 };
 
 exports.playCmd = rl => {
+	// Cargar todas las preguntas en un array
+	// eliminarlas del array segun se pregunta
+	// promesas
+
+
+
 	let score = 0;
 	let toBeResolve = [];
 	let numPreguntas = model.count();
