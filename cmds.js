@@ -173,11 +173,7 @@ exports.testCmd = (rl,id) => {
 		}
 		return makeQuestion(rl, `${quiz.question}?` )
 		.then (a => {
-			quiz.answer = quiz.answer.replace(/á/gi,"a");
-			quiz.answer = quiz.answer.replace(/é/gi,"e");
-			quiz.answer = quiz.answer.replace(/í/gi,"i");
-			quiz.answer = quiz.answer.replace(/ó/gi,"o");
-			quiz.answer = quiz.answer.replace(/ú/gi,"u");
+
 			if(a.toLowerCase() === quiz.answer.toLowerCase()){
 		   		log("Su respuesta es correcta");
 		   		biglog('CORRECTO', 'green');
@@ -204,79 +200,160 @@ exports.playCmd = rl => {
 
 	let score = 0;
 	let toBeResolve = [];
-	// let numPreguntas = models.quiz.count();
-	// toBeResolve.lenght = numPreguntas;
-	// //let i;
+	let numPreguntas = 0;
+		// //let i;
 
-	models.quiz.findAll()
-		.then(quizzes =>  { //Tomo como parametro todos los quizzes que he cogido
-			quizzes.forEach(quiz => {
-				toBeResolve.push(quiz);
+
+	models.quiz.findAll() //Paso todos los quizzes
+		.then (quizzes => {
+			quizzes.forEach((quiz, id) => {
+					++numPreguntas;
+			 toBeResolve.lenght = numPreguntas;
+
+			 //console.dir(toBeResolve[1]);
+			 //console.log(toBeResolve.lenght);
+
+	    	toBeResolve.push(quiz.id);
 			})
+		 
 		})
-		
-
 		.then (() => {
+			if(toBeResolve.lenght === 0){
+				log('No hay preguntas', 'red');
+			}else{
+				playOne();
+			}
+		})
+		.catch (error => {
+			errorlog(error.message);
+		})
+		.then (() => {
+			rl.prompt();
+		});
+
 			const playOne = () => {
 
-			if (toBeResolve.lenght === 0 ){
-			log("Ninguna pregunta para mostrar");
-			log(`Llevas '${score}' puntos`);
-			rl.prompt();
-			} 
+				
+					var idAzar = Math.floor(Math.random()*(toBeResolve.lenght-score));
+					//console.log(idAzar);
+					
+					//validateId(idAzar)
+					let quiz = toBeResolve[idAzar];
 
+					models.quiz.findById(toBeResolve[idAzar])
+					.then(quiz => {
+						// if(!quiz) {
+						// 	throw new Error(`No existe quiz asociado a id = ${id}`);
+						// }
+						return makeQuestion(rl, `${quiz.question}?` )
+						.then (a => {
 
-			var idAzar = Math.floor(Math.random()*(toBeResolve.lenght-score));
-			let quiz = toBeResolve[idAzar];
-			//var id = toBeResolve[idAzar];
-			return makeQuestion(rl, `${quiz.question}?` )
-				//.then(id => models.quiz.findById(id)){
-					// .then(quiz => {
-					// if(!quiz) {
-					// 	throw new Error(`No existe quiz asociado a id = ${id}`);
-					// }
-					// return makeQuestion(rl, `${quiz.question}?` )
-					.then (a => {
-						quiz.answer = quiz.answer.replace(/á/gi,"a");
-						quiz.answer = quiz.answer.replace(/é/gi,"e");
-						quiz.answer = quiz.answer.replace(/í/gi,"i");
-						quiz.answer = quiz.answer.replace(/ó/gi,"o");
-						quiz.answer = quiz.answer.replace(/ú/gi,"u");
-						if(a.toLowerCase() === quiz.answer.toLowerCase()){
-					   		score += 1;
-							log('CORRECTO', 'green');
-							log(`Llevas'${score}' puntos`);
-					   		biglog('CORRECTO', 'green');
+							if(a.toLowerCase() === quiz.answer.toLowerCase()){
+						   		score += 1;
+								log(`CORRECTO - Llevas ${score} puntos`, 'green');
 
-					   		if(score===numPreguntas){
-								log('Has ganado', 'green');
-								biglog(' :)   HAS   GANADO!!!!', 'green');
-								
-									rl.prompt();
-								
-							} else {
-					   			toBeResolve.splice(idAzar, 1);
+								toBeResolve.splice(idAzar, 1);
 								playOne();
-					   		} 
-					   	} else {
-							log('INCORRECTO', 'red');
-							log(`FIN DEL JUEGO. Has conseguido'${score}' puntos. Puedes volver a empezar`);
-						}
-					})
-					// })
-					.then(() => {
-               			rl.prompt();
-            		})
-					.catch (error => {
-						errorlog(error.message);
-						rl.prompt();
-					});
-				//};	
+								if(toBeResolve.lenght === 0){
+									log(`Fin. Has ganado. Preguntas acertadas: ${colorize(score, "yellow")}`, "green");
+          							rl.prompt();
+								}
+						   	} else {
+						   		log(`INCORRECTO - FIN DEL JUEGO. Has conseguido'${score}' puntos. Puedes volver a empezar`, 'red');
+					  			rl.prompt();
+						   	}
+						})
+						.catch (error => {
+							errorlog(error.message);
+							rl.prompt();
+	            		})
+						.then(() => {
+	               			rl.prompt();
+						});
+				});
+				
 			}
+			//playOne();
 		
-		playOne();
 
-		});
+
+
+
+	// models.quiz.findAll()
+	// 	.then (quizzes => {
+	// 		quizzes.forEach((quiz, id) => {
+ //        	toBeResolve[id] = quiz;
+	// 		});
+		
+	// 	//});
+		
+		
+	// 	//.then (() => {
+	// 		const playOne = () => {
+
+	// 		if (toBeResolve.lenght === 0 ){
+	// 		log("Ninguna pregunta para mostrar, has ganado");
+	// 		//log(`Llevas '${score}' puntos`);
+	// 		rl.prompt();
+	// 		} else {
+	// 		let idAzar = Math.floor(Math.random()*(toBeResolve.lenght-score));
+	// 		let quiz = toBeResolve[idAzar];
+	// 		toBeResolve.splice(idAzar, 1);
+	// 		//var id = toBeResolve[idAzar];
+	// 		//let quiz = models.quiz.findById(id);
+	// 		return makeQuestion(rl, quiz.question)
+	// 			//.then(id => models.quiz.findById(id)){
+	// 				// .then(quiz => {
+	// 				// if(!quiz) {
+	// 				// 	throw new Error(`No existe quiz asociado a id = ${id}`);
+	// 				// }
+	// 				// return makeQuestion(rl, `${quiz.question}?` )
+	// 				.then (a => {
+	// 					// quiz.answer = quiz.answer.replace(/á/gi,"a");
+	// 					// quiz.answer = quiz.answer.replace(/é/gi,"e");
+	// 					// quiz.answer = quiz.answer.replace(/í/gi,"i");
+	// 					// quiz.answer = quiz.answer.replace(/ó/gi,"o");
+	// 					// quiz.answer = quiz.answer.replace(/ú/gi,"u");
+	// 					if(a.toLowerCase() === quiz.answer.toLowerCase()){
+	// 				   		score += 1;
+	// 						log(`CORRECTO - Llevas ${score} puntos`, 'green');
+	// 						playOne();
+
+	// 				  //  		if(score===numPreguntas){
+	// 						// 	log('Has ganado', 'green');
+	// 						// 	biglog(' :)   HAS   GANADO!!!!', 'green');
+								
+	// 						// 		rl.prompt();
+								
+	// 						// // } else {
+	// 				  // //  			toBeResolve.splice(idAzar, 1);
+	// 						// // 	playOne();
+	// 				  // //  		} 
+	// 				  //  	} else {
+	// 				  	 }else {
+	// 						log(`INCORRECTO - FIN DEL JUEGO. Has conseguido'${score}' puntos. Puedes volver a empezar`, 'red');
+	// 				  		rl.prompt();
+				
+	// 					}
+	// 				})
+	// 				// })
+	// 					.catch (error => {
+	// 					errorlog(error.message);
+	// 					rl.prompt();
+ //            		})
+	// 				.then(() => {
+ //               			rl.prompt();
+	// 				});
+	// 		}
+
+
+			
+	// 			//};	
+	// 		}
+		
+	// 	playOne();
+
+	// 	});
 
 };
 
