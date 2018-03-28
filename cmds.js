@@ -224,138 +224,46 @@ exports.playCmd = (socket, rl )=> {
 			}else{
 				playOne();
 			}
-		})
-		.catch (error => {
-			errorlog(socket, error.message);
-		})
-		.then (() => {
-			rl.prompt();
 		});
-
-			const playOne = () => {
-
-				
-					var idAzar = Math.floor(Math.random()*(toBeResolve.lenght-score));
-					//console.log(idAzar);
-					
-					//validateId(idAzar)
-					let quiz = toBeResolve[idAzar];
-
-					models.quiz.findById(toBeResolve[idAzar])
-					.then(quiz => {
-						// if(!quiz) {
-						// 	throw new Error(`No existe quiz asociado a id = ${id}`);
-						// }
-						return makeQuestion(socket, rl, `${quiz.question}?` )
-						.then (a => {
-
-							if(a.toLowerCase() === quiz.answer.toLowerCase()){
-						   		score += 1;
-								log(socket, `CORRECTO - Llevas ${score} puntos`, 'green');
-
-								toBeResolve.splice(idAzar, 1);
-								playOne();
-								if(toBeResolve.lenght === 0){
-
-									log(socket, `Fin. Has ganado. Preguntas acertadas: ${colorize(score, "yellow")}`, "green");
-          							rl.prompt();
-								}
-						   	} else {
-						   		log(socket, `INCORRECTO - FIN DEL JUEGO. Has conseguido'${score}' puntos. Puedes volver a empezar`, 'red');
-					  			rl.prompt();
-						   	}
-						})
-						.catch (error => {
-							errorlog(socket,  error.message);
-							rl.prompt();
-	            		})
-						.then(() => {
-	               			rl.prompt();
-						});
-				});
-				
-			}
-			//playOne();
 		
-
-
-
-
-	// models.quiz.findAll()
-	// 	.then (quizzes => {
-	// 		quizzes.forEach((quiz, id) => {
- //        	toBeResolve[id] = quiz;
-	// 		});
-		
-	// 	//});
-		
-		
-	// 	//.then (() => {
-	// 		const playOne = () => {
-
-	// 		if (toBeResolve.lenght === 0 ){
-	// 		log("Ninguna pregunta para mostrar, has ganado");
-	// 		//log(`Llevas '${score}' puntos`);
-	// 		rl.prompt();
-	// 		} else {
-	// 		let idAzar = Math.floor(Math.random()*(toBeResolve.lenght-score));
-	// 		let quiz = toBeResolve[idAzar];
-	// 		toBeResolve.splice(idAzar, 1);
-	// 		//var id = toBeResolve[idAzar];
-	// 		//let quiz = models.quiz.findById(id);
-	// 		return makeQuestion(rl, quiz.question)
-	// 			//.then(id => models.quiz.findById(id)){
-	// 				// .then(quiz => {
-	// 				// if(!quiz) {
-	// 				// 	throw new Error(`No existe quiz asociado a id = ${id}`);
-	// 				// }
-	// 				// return makeQuestion(rl, `${quiz.question}?` )
-	// 				.then (a => {
-	// 					// quiz.answer = quiz.answer.replace(/á/gi,"a");
-	// 					// quiz.answer = quiz.answer.replace(/é/gi,"e");
-	// 					// quiz.answer = quiz.answer.replace(/í/gi,"i");
-	// 					// quiz.answer = quiz.answer.replace(/ó/gi,"o");
-	// 					// quiz.answer = quiz.answer.replace(/ú/gi,"u");
-	// 					if(a.toLowerCase() === quiz.answer.toLowerCase()){
-	// 				   		score += 1;
-	// 						log(`CORRECTO - Llevas ${score} puntos`, 'green');
-	// 						playOne();
-
-	// 				  //  		if(score===numPreguntas){
-	// 						// 	log('Has ganado', 'green');
-	// 						// 	biglog(' :)   HAS   GANADO!!!!', 'green');
-								
-	// 						// 		rl.prompt();
-								
-	// 						// // } else {
-	// 				  // //  			toBeResolve.splice(idAzar, 1);
-	// 						// // 	playOne();
-	// 				  // //  		} 
-	// 				  //  	} else {
-	// 				  	 }else {
-	// 						log(`INCORRECTO - FIN DEL JUEGO. Has conseguido'${score}' puntos. Puedes volver a empezar`, 'red');
-	// 				  		rl.prompt();
-				
-	// 					}
-	// 				})
-	// 				// })
-	// 					.catch (error => {
-	// 					errorlog(error.message);
-	// 					rl.prompt();
- //            		})
-	// 				.then(() => {
- //               			rl.prompt();
-	// 				});
-	// 		}
-
+		const playOne = () => {
 
 			
-	// 			//};	
-	// 		}
+			var idAzar = Math.floor(Math.random()*(toBeResolve.lenght-score));
 		
-	// 	playOne();
+			let quiz = toBeResolve[idAzar];
 
-	// 	});
+			models.quiz.findById(toBeResolve[idAzar])
+			.then(quiz => {
+				
+				return makeQuestion(socket, rl, `${quiz.question}?` )
+				.then (a => {
+
+					if(a.toLowerCase() === quiz.answer.toLowerCase()){
+				   		score += 1;
+						log(socket, `CORRECTO - Llevas ${score} puntos`, 'green');
+
+						toBeResolve.splice(idAzar, 1);
+						playOne();
+						if(score===numPreguntas){
+
+							log(socket, `Fin. Has ganado. Preguntas acertadas: ${colorize(score, "yellow")}`, "green");
+  							rl.prompt();
+						}
+				   	} else {
+				   		log(socket, `INCORRECTO - FIN DEL JUEGO. Has conseguido'${score}' puntos. Puedes volver a empezar`, 'red');
+			  			rl.prompt();
+				   	}
+				})
+				.catch (error => {
+					errorlog(socket,  error.message);
+					rl.prompt();
+        		})
+				.then(() => {
+           			rl.prompt();
+				});
+			});
+		}
 
 };
 
