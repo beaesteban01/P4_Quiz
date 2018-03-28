@@ -358,7 +358,7 @@ exports.playCmd = (socket, rl )=> {
 };
 
 exports.creditsCmd = (socket, rl) => {
-	log("Mostrar los autores:");
-	log('Beatriz Esteban Navarro');
+	log(socket, "Mostrar los autores:");
+	log(socket, 'Beatriz Esteban Navarro');
 	rl.prompt();
 };
