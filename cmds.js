@@ -22,7 +22,8 @@ exports.helpCmd = (socket, rl) => {
 
 exports.quitCmd = (socket, rl )=> {
 	rl.close();
-	rl.prompt();
+	socket.end();
+	//rl.prompt();
 };
 
 const makeQuestion = (socket, rl, text) => {
@@ -255,6 +256,7 @@ exports.playCmd = (socket, rl )=> {
 								toBeResolve.splice(idAzar, 1);
 								playOne();
 								if(toBeResolve.lenght === 0){
+
 									log(socket, `Fin. Has ganado. Preguntas acertadas: ${colorize(score, "yellow")}`, "green");
           							rl.prompt();
 								}

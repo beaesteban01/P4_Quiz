@@ -99,9 +99,9 @@ rl
 	})
 
 .on('close', () => {
-	console.log(socket, 'Adiós!');
+	log(socket, 'Adiós!');
 	
-	process.exit(0);
+	//process.exit(0); No hay que matar el servidor, solo cada listener
 });
 
 
