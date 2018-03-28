@@ -1,8 +1,6 @@
 const figlet = require('figlet');
 const chalk = require('chalk');
 
-const net = require("net"); //usar sockets
-
 
 /** 
  * Dar color a un string

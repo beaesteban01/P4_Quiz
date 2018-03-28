@@ -36,9 +36,9 @@ const makeQuestion = (socket, rl, text) => {
 
 
 exports.addCmd = (socket, rl) => {
-	makeQuestion(rl, 'Introduzca una pregunta: ')
+	makeQuestion(socket, rl, 'Introduzca una pregunta: ')
 	.then(q => { //Q es como si hicieramos un metodo que recibe (string q)
-		return makeQuestion(rl, 'Introduzca una respuesta: ')
+		return makeQuestion(socket, rl, 'Introduzca una respuesta: ')
 		.then(a => {
 			return {question: q, answer: a};
 		});
@@ -79,7 +79,7 @@ exports.listCmd = (socket, rl )=> {
 
 
 
-const validateId = (socket, id) => {
+const validateId = (id) => {
 	return new Promise((resolve, reject) => {
 		if(typeof id === "undefined") {
 			reject(new Error(`Falta el parametro <id>.`));
@@ -131,10 +131,10 @@ exports.editCmd = (socket, rl,id) => {
 			throw new Error(`No existe quiz asociado a id=${id}`);
 		}
 			process.stdout.isTYY && setTimeout (() => {rl.write(quiz.question)}, 0);
-			return makeQuestion(rl, 'Introduca la pregunta: ')
+			return makeQuestion(socket, rl, 'Introduca la pregunta: ')
 			.then (q => {
 				process.stdout.isTYY && setTimeout (() => {rl.write(quiz.answer)}, 0);
-				return makeQuestion(rl, 'Introduzca la respuesta: ')
+				return makeQuestion(socket, rl, 'Introduzca la respuesta: ')
 				.then (a => {
 					quiz.question = q;
 					quiz.answer = a;
@@ -171,7 +171,7 @@ exports.testCmd = (socket, rl,id) => {
 		if(!quiz) {
 			throw new Error(`No existe quiz asociado a id = ${id}`);
 		}
-		return makeQuestion(rl, `${quiz.question}?` )
+		return makeQuestion(socket, rl, `${quiz.question}?` )
 		.then (a => {
 
 			if(a.toLowerCase() === quiz.answer.toLowerCase()){
@@ -245,7 +245,7 @@ exports.playCmd = (socket, rl )=> {
 						// if(!quiz) {
 						// 	throw new Error(`No existe quiz asociado a id = ${id}`);
 						// }
-						return makeQuestion(rl, `${quiz.question}?` )
+						return makeQuestion(socket, rl, `${quiz.question}?` )
 						.then (a => {
 
 							if(a.toLowerCase() === quiz.answer.toLowerCase()){
